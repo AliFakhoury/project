@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain "transmessage" %}
+
+{% block body  %}
+
+    {% if app.request.locale == "ar" %}
+
+        {% include 'translation/TransAr.html.twig' %}
+    {% else %}
+        {% include 'translation/TransEng.html.twig' %}
+
+    {% endif %}
+
+    <body style="font-size:120%;" class="hold-transition skin-blue sidebar-mini">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script></script>
+    <!-- FastClick -->
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+    <style type="text/css">
+        tfoot option {
+            width: 100%;
+            padding: 2px;
+            border:1px solid black;
+        }
+    </style>
+    <div id="container">
+        <div class="wrapper">
+
+            {% include 'AdminHeader.html.twig' %}
+
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i>{% trans into app.request.locale%} Home{% endtrans %}</a></li>
+                        <li class="active">{% trans into app.request.locale%}Manage System Pages{% endtrans %}</li>
+                        <li class="active">{% trans into app.request.locale%}Edit System Page{% endtrans %}</li>
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <div style="margin-right: 17%;margin-left: 17%;margin-top:3%">
+                    {% if app.request.locale == "ar" %}
+                        {% set submit = "اضافة" %}
+                    {% else %}
+                        {% set submit = "submit" %}
+                    {% endif %}
+
+                    {{ form_start(form)}}
+
+                    <h4>{% trans into app.request.locale%}Page Name{% endtrans %}</h4>{{ form_widget(form.pageName)}}
+                    <h4>{% trans into app.request.locale%}Page URL{% endtrans %}</h4>{{ form_widget(form.pageURL)}}
+                    <h4>{% trans into app.request.locale%}Role{% endtrans %}</h4>{{ form_widget(form.role)}}
+                    <p></p>
+                    {{ form_widget(form.Submit, {label:submit ~ ""})}}
+
+                    {{ form_end(form)}}
+                    <p></p>
+                    <a href="{{ path('ManageSystemPages',{'pageNumber':pageNumber,'language':app.request.locale}) }}"  style="color:white;background-color:rgb(60,141,188)" class="btn btn-primary" >{% trans into app.request.locale%}Back{% endtrans %}</a>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </body>
+
+
+{% endblock %}
+

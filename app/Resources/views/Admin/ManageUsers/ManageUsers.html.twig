@@ -1,0 +1,153 @@
+
+{% extends 'base.html.twig' %}
+{% trans_default_domain "transmessage" %}
+
+
+{% block body  %}
+
+    {% if app.request.locale == "ar" %}
+
+        {% include 'translation/TransAr.html.twig' %}
+    {% else %}
+        {% include 'translation/TransEng.html.twig' %}
+
+    {% endif %}
+
+    <body style="font-size:120%;" class="hold-transition skin-blue sidebar-mini">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.js-datepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+    </script>
+    <div id="container">
+
+        <div class="wrapper">
+            {% include 'AdminHeader.html.twig' %}
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i>{% trans into app.request.locale%}Home{% endtrans %}</a></li>
+                        <li class="active">{% trans into app.request.locale%}Manage Users{% endtrans %}</li>
+                    </ol>
+                </section>
+                <!-- Main content -->
+                <div style="margin-right:5%;margin-left: 5%;margin-top: 3%;">
+                    {% if app.request.locale == "ar" %}
+                        {% set search = "اضافة" %}
+                        {% set reset = "افراغ" %}
+                    {% else %}
+                        {% set search = "submit" %}
+                        {% set reset = "clear" %}
+                    {% endif %}
+
+                {{ form_start(form, {'attr': {class: 'form-inline'}}) }}
+                    <div class="form-group" style="margin-right:2%" >
+                        <label>{% trans into app.request.locale%}Name{% endtrans %}</label>
+                        {{ form_widget(form.Name) }}
+                    </div>
+                    <div class="form-group" style="margin-right:2%" >
+                        <label>{% trans into app.request.locale%}Email{% endtrans %}</label>
+                        {{ form_widget(form.email) }}
+                    </div>
+                    <div class="form-group" style="margin-right:2%" >
+                        <label>{% trans into app.request.locale%}Status{% endtrans %}</label>
+                        {{ form_widget(form.status) }}
+                    </div>
+                    <div class="form-group" style="margin-right:2%"  >
+                        <label>{% trans into app.request.locale%}Category{% endtrans %}</label>
+                        {{ form_widget(form.category)}}
+                    </div>
+                    <p></p>
+                    <div class="form-group" style="margin-right:2%" >
+                        <label>{% trans into app.request.locale%}From{% endtrans %}</label>
+                        {{form_widget(form.from)}}
+                    </div>
+                    <div class="form-group" style="margin-right:2%" >
+                        <label>{% trans into app.request.locale%}To{% endtrans %}</label>
+                        {{ form_widget(form.to) }}
+                    </div>
+                    <p></p>
+                    {{ form_widget(form.Search, {label:search ~ ""}) }}
+
+                    {{ form_end(form) }}
+
+
+                <div class="table-responsive" style="">
+
+                    <table  class="table table-hover"  >
+                        <thead>
+                        <tr>
+                            <th>{% trans into app.request.locale%}id{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}First name{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Last name{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Email{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Nationality{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Category{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Registration Date{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Status{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Actions{% endtrans %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% if Users is defined %}
+                            {% for user in Users %}
+                                <tr>
+                                    <td> {{ user.user_id }} </td>
+                                    <td> {{ user.first_name }} </td>
+                                    <td> {{ user.last_name }} </td>
+                                    <td> {{ user.user_email }} </td>
+                                    <td> {{ user.country_name }} </td>
+                                    <td> {{ user.category_name }}</td>
+                                    <td> {{ user.registration_date }} </td>
+                                    <td> {{ user.user_status_name }} </td>
+                                    <td>
+
+                                       {% if canView %}
+                                           <a href="{{ path('Display',{'id':user.user_id,'language' : app.request.locale,'pageNumber': pageNumber })}}"><i  class="material-icons">&#xe8f4;</i></a>
+                                       {% endif %}
+
+                                        {% if canEdit %}
+                                            <a  href="{{ path('update',{'id':user.user_id,'language' : app.request.locale,'pageNumber': pageNumber })}}" >{%if user.user_status_name =="Blocked"%}<i style="color:red" class="material-icons">&#xe15c;</i>{% else %} <i style="color: #00a157" class="material-icons">&#xe86c;</i>{% endif %}</a>
+                                        {% endif %}
+
+                                        {% if canDelete %}
+                                            <a href="{{ path('delete',{'id':user.user_id,'language' : app.request.locale ,'pageNumber': pageNumber})}}"><i style="color: #AAB7B8    " class="material-icons">&#xe872;</i></a>
+                                        {% endif %}
+
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+
+                    </table>
+
+                    {% set link = '/talentsboard/web/app_dev.php/Admin/ManageUsers/' ~ app.request.locale ~'/' %}
+
+                    {% include 'pagination/pagination.html.twig' with {
+                    currentFilters: { 'pageNumber': pageNumber , 'language': app.request.locale },
+                    currentPage: pageNumber,
+                    paginationPath: link,
+                    lastPage: numPages,
+                    showAlwaysFirstAndLast: false
+                    } only %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+    </body>
+
+
+{% endblock %}

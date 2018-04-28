@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain "transmessage" %}
+
+{% block body  %}
+
+    {% if app.request.locale == "ar" %}
+
+        {% include 'translation/TransAr.html.twig' %}
+    {% else %}
+        {% include 'translation/TransEng.html.twig' %}
+
+    {% endif %}
+
+    <body style="font-size:120%;" class="hold-transition skin-blue sidebar-mini">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+
+
+
+    <style type="text/css">
+        tfoot option {
+            width: 100%;
+            padding: 2px;
+            border:1px solid black;
+        }
+    </style>
+    <div id="container">
+        <div class="wrapper">
+
+            {% include 'AdminHeader.html.twig' %}
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        Dashboard
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li class="active">View System Log</li>
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <div class="table-responsive" style="margin:3%">
+                    <table id="example"  class="table table-hover"  >
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{% trans into app.request.locale%}Admin Id{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Issued Id{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Table Name{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Action{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Description{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Date{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Ip{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Time stamp{% endtrans %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for log in  viewLogs %}
+                            <tr>
+                                <td> {{ log.id }} </td>
+                                <td> {{ log.admin_id }} </td>
+                                <td> {{ log.user_id }} </td>
+                                <td> {{ log.table_name }} </td>
+                                <td> {{ log.action }} </td>
+                                <td>{{ log.description }}</td>
+                                <td>{{ log.date|date('Y-m-d') }}</td>
+                                <td>{{ log.ip }}</td>
+                                <td>{{ log.description }}</td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% set link = '/talentsboard/web/app_dev.php/Admin/ViewSystemLog/' %}
+
+                    {% include 'pagination/pagination.html.twig' with {
+                    currentFilters: { 'pageNumber': pageNumber , 'language': app.request.locale },
+                    currentPage: pageNumber,
+                    paginationPath: link,
+                    lastPage: numPages,
+                    showAlwaysFirstAndLast: false
+                    } only %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </body>
+
+
+{% endblock %}

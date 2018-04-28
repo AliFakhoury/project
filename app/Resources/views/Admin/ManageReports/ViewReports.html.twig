@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain "transmessage" %}
+
+{% block body  %}
+
+    {% if app.request.locale == "ar" %}
+        {% include 'translation/TransAr.html.twig' %}
+    {% else %}
+        {% include 'translation/TransEng.html.twig' %}
+
+    {% endif %}
+
+    <body style="font-size:120%;" class="hold-transition skin-blue sidebar-mini">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+
+
+    <style type="text/css">
+        tfoot option {
+            width: 100%;
+            padding: 2px;
+            border:1px solid black;
+        }
+    </style>
+    <div id="container">
+        <div class="wrapper">
+            {% include 'AdminHeader.html.twig' %}
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li class="active">View Reports</li>
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <div class="table-responsive" style="margin:3%">
+                    <table id="example"  class="table table-hover"  >
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{% trans into app.request.locale%}Title{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Description{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}User{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Date{% endtrans %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for report in  ViewReports %}
+                            <tr>
+                                <td> {{ report.id }} </td>
+                                <td> {{ report.title }} </td>
+                                <td> {{ report.description }} </td>
+                                <td> {{ report.userID }} </td>
+                                <td>{{ report.date|date('Y-m-d') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+
+                    {% set link = '/talentsboard/web/app_dev.php/Admin/ViewReports/' %}
+
+                    {% include 'pagination/pagination.html.twig' with {
+                    currentFilters: { 'pageNumber': pageNumber , 'language': app.request.locale },
+                    currentPage: pageNumber,
+                    paginationPath: link,
+                    lastPage: numPages,
+                    showAlwaysFirstAndLast: false
+                    } only %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </body>
+
+
+{% endblock %}

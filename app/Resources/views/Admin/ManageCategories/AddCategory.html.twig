@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain "transmessage" %}
+
+{% block body  %}
+    {% if app.request.locale == "ar" %}
+
+        {% include 'translation/TransAr.html.twig' %}
+    {% else %}
+        {% include 'translation/TransEng.html.twig' %}
+
+    {% endif %}
+
+
+    <body style="font-size:120%;" class="hold-transition skin-blue sidebar-mini">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+
+
+    <style type="text/css">
+        tfoot option {
+            width: 100%;
+            padding: 2px;
+            border:1px solid black;
+        }
+    </style>
+    <div id="container">
+        <div class="wrapper">
+
+            {% include 'AdminHeader.html.twig' %}
+
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i>{% trans into app.request.locale%}Home{% endtrans %}</a></li>
+                        <li class="active">{% trans into app.request.locale%}Manage Categories{% endtrans %}</li>
+                        <li class="active">{% trans into app.request.locale%}Add Category{% endtrans %}</li>
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+
+                <div style="margin-right: 17%;margin-left: 17%;margin-top:4%">
+                    {% if app.request.locale == "ar" %}
+                        {% set submit = "اضافة" %}
+                    {% else %}
+                        {% set submit = "submit" %}
+                    {% endif %}
+                    {% if message is defined%}
+                        <div id="Alert" class="alert alert-success">{{ message }}
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a></div>
+
+                    {% endif %}
+                    {% if ErrorMessage is defined%}
+                        <div class="alert alert-danger">{{ ErrorMessage }}
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a></div>
+
+                    {% endif %}
+                    {{ form_start(form,{'attr': {'id': 'Form'}}) }}
+
+
+                    <h4>{% trans into app.request.locale%}Category{% endtrans %} </h4> {{ form_widget(form.categoryName) }}
+                    <h4>{% trans into app.request.locale%}Parent Category{% endtrans %}</h4>{{ form_widget(form.parentCategory) }}
+                    <p></p>
+                    {{ form_widget(form.Submit, {label:submit ~ ""})}}
+                    {{ form_widget(form.Clear)}}
+
+                    {{ form_end(form)}}
+                    <p></p>
+                    <a href="{{ path('ManageCategories',{'pageNumber':pageNumber,'language':app.request.locale}) }}"  style="color:white;background-color:rgb(60,141,188)" class="btn btn-primary" >{% trans into app.request.locale%}Back{% endtrans %}</a>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </body>
+
+
+{% endblock %}
+

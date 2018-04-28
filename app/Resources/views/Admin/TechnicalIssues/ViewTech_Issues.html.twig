@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain "transmessage" %}
+{% block body  %}
+    {% if app.request.locale == "ar" %}
+        {% include 'translation/TransAr.html.twig' %}
+    {% else %}
+        {% include 'translation/TransEng.html.twig' %}
+
+    {% endif %}
+
+
+    <body style="font-size:120%;" class="hold-transition skin-blue sidebar-mini">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+
+    <style type="text/css">
+        tfoot option {
+            width: 100%;
+            padding: 2px;
+            border:1px solid black;
+        }
+    </style>
+    <div id="container">
+        <div class="wrapper">
+            {% include 'AdminHeader.html.twig' %}
+
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        Dashboard
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li class="active">View Technical Issues</li>
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <div class="table-responsive" style="margin:3%">
+                    <table id="example"  class="table table-hover"  >
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{% trans into app.request.locale%}User Id{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Title{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Description{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Date{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Ip{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Timestamp{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Browser{% endtrans %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for technicalIssue  in technicalIssues %}
+                            <tr>
+                                <td> {{ technicalIssue.id }} </td>
+                                <td> {{ technicalIssue.userID }} </td>
+                                <td> {{ technicalIssue.title }} </td>
+                                <td> {{ technicalIssue.description }} </td>
+                                <td>{{  technicalIssue.date|date('Y-m-d') }}</td>
+                                <td> {{ technicalIssue.ip }} </td>
+                                <td> {{ technicalIssue.timestamp|date('Y-m-d') }} </td>
+                                <td> {{ technicalIssue.browser }} </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                    {% set link = '/talentsboard/web/app_dev.php/Admin/ViewTechIssues/' %}
+
+                    {% include 'pagination/pagination.html.twig' with {
+                    currentFilters: { 'pageNumber': pageNumber , 'language': app.request.locale },
+                    currentPage: pageNumber,
+                    paginationPath: link,
+                    lastPage: numPages,
+                    showAlwaysFirstAndLast: false
+                    } only %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </body>
+
+
+{% endblock %}

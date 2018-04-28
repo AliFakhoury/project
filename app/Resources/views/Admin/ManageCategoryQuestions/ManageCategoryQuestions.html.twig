@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain "transmessage" %}
+
+{% block body  %}
+    {% if app.request.locale == "ar" %}
+
+        {% include 'translation/TransAr.html.twig' %}
+    {% else %}
+        {% include 'translation/TransEng.html.twig' %}
+
+    {% endif %}
+    <body style="font-size:120%;" class="hold-transition skin-blue sidebar-mini">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+
+    <div id="container">
+        <div class="wrapper">
+            {% include 'AdminHeader.html.twig' %}
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li class="active">View Reports</li>
+                    </ol>
+                </section>
+
+                {% if canAdd %}
+                    <a href="{{ path('AddQuestion',{'pageNumber':pageNumber,'language':app.request.locale}) }}" ><h4 style="margin-right: 4%;margin-top:3%;float: right;">{% trans into app.request.locale%} Add Question {% endtrans %}<i  class="material-icons">plus_one</i></h4></a>
+                {% endif %}
+
+                <!-- Main content -->
+                {{ form_start(form, {'attr': {class: 'form-inline'}}) }}
+
+                <div style="margin-right:5%;margin-left: 5%;margin-top: 3%;">
+                    <div class="form-group" style="margin-right:2%" >
+                        <label>{% trans into app.request.locale%}Question Name{% endtrans %}</label>
+                        {{ form_widget(form.QuestionName) }}
+                    </div>
+                    <div class="form-group" style="margin-right:2%" >
+                        <label>{% trans into app.request.locale%}Question{% endtrans %}</label>
+                        {{ form_widget(form.Question) }}
+                    </div>
+                    <div class="form-group" style="margin-right:2%" >
+                        <label>{% trans into app.request.locale%}Category{% endtrans %}</label>
+                        {{ form_widget(form.Category) }}
+                    </div>
+                    <p></p>
+                    {{ form_widget(form.submit) }}
+                    {{ form_end(form) }}
+                <div class="table-responsive" style="margin:3%">
+                    <table id="example"  class="table table-hover"  >
+                        <thead>
+                        <tr>
+                            <th>{% trans into app.request.locale%}Question ID{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Question Name{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Question Categories{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Question{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Actions{% endtrans %}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for question in  questions %}
+                            <tr>
+                                <td> {{ question.quest_id }} </td>
+                                <td> {{ question.quest_name }} </td>
+                                <td>  {{ question.categories }}</td>
+                                <td> {{ question.question }} </td>
+                                <td>
+
+                                    {% if canEdit %}
+                                        <a href="  {{ path('AssignCategoryQuestions',{'questionID': question.quest_id ,'pageNumber':pageNumber})}}"><i class="material-icons">mode_edit</i></a>
+                                    {% endif %}
+
+                                    {% if canDelete %}
+                                        <a href="  {{ path('QuestionDelete',{'id':question.quest_id,'pageNumber':pageNumber,'language':app.request.locale})}}"><i class="material-icons">&#xe872;</i></a>
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                    {% set link = '/talentsboard/web/app_dev.php/Admin/ManageCategoryQuestions/' %}
+
+                    {% include 'pagination/pagination.html.twig' with {
+                    currentFilters: { 'pageNumber': pageNumber , 'language': app.request.locale },
+                    currentPage: pageNumber,
+                    paginationPath: link,
+                    lastPage: numPages,
+                    showAlwaysFirstAndLast: false
+                    } only %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </body>
+
+
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain "transmessage" %}
+
+{% block body  %}
+
+    {% if app.request.locale == "ar" %}
+
+        {% include 'translation/TransAr.html.twig' %}
+    {% else %}
+        {% include 'translation/TransEng.html.twig' %}
+
+    {% endif %}
+    <body style="font-size:120%;" class="hold-transition skin-blue sidebar-mini">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+    <div id="container">
+        <div class="wrapper">
+
+            {% include 'AdminHeader.html.twig' %}
+            <!-- Left side column. contains the logo and sidebar -->
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i>{% trans into app.request.locale%} Home{% endtrans %}</a></li>
+                        <li class="active">{% trans into app.request.locale%}Manage Category{% endtrans %}</li>
+                    </ol>
+                </section>
+
+                {% if canAdd %}
+                    <a href="{{ path('AddACategory',{'pageNumber':pageNumber,'language':app.request.locale}) }}" ><h4 style="margin-right: 4%;margin-top:3%;float: right;">{% trans into app.request.locale%} Add Category {% endtrans %}<i  class="material-icons">plus_one</i></h4></a>
+                {% endif %}
+                <!-- Main content -->
+                <div style="margin-right:5%;margin-left: 5%;margin-top: 3%;">
+                    {{ form_start(form, {'attr': {class: 'form-inline'}}) }}
+                    <div class="form-group" style="margin-right:2%" >
+                        <label>{% trans into app.request.locale%}Category Name{% endtrans %}</label>
+                        {{ form_widget(form.categoryName) }}
+                    </div>
+                    <p></p>
+                    {{ form_widget(form.Search) }}
+                    {{ form_end(form) }}
+                </div>
+                <div class="table-responsive" style="margin:3%;clear:both ">
+                    <table id="example"  class="table table-hover"  >
+                        <thead>
+                        <tr>
+                            <th>{% trans into app.request.locale%}id{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Category name{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Parent{% endtrans %}</th>
+                            <th>{% trans into app.request.locale%}Actions{% endtrans %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for category in  Categories %}
+                            <tr>
+                                <td> {{ category.category_id }} </td>
+                                <td> {{ category.category_name }} </td>
+                                <td> {{ category.parent_name }} </td>
+                                <td>
+                                    {% if canEdit %}
+                                        <a href="  {{ path('UpdateCategories',{'id':category.category_id,'pageNumber':pageNumber,'language':app.request.locale})}}"><i class="material-icons">mode_edit</i></a>
+                                    {% endif %}
+
+                                    {% if canDelete %}
+                                        <a href="  {{ path('CategoryDelete',{'id':category.category_id,'pageNumber':pageNumber,'language':app.request.locale})}}"><i class="material-icons">&#xe872;</i></a>
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                    {% set link = '/talentsboard/web/app_dev.php/Admin/ManageCategories/' %}
+
+                    {% include 'pagination/pagination.html.twig' with {
+                    currentFilters: { 'pageNumber': pageNumber , 'language': app.request.locale },
+                    currentPage: pageNumber,
+                    paginationPath: link,
+                    lastPage: numPages,
+                    showAlwaysFirstAndLast: false
+                    } only %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </body>
+
+
+{% endblock %}
